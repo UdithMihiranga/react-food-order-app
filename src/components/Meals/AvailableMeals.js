@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 
 const AvailableMeals = () => {
 
+    const [isLoading, setIsLoading] =useState(false)
     const [meals,setMeals] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
-            
+            setIsLoading(true)
             const response = await fetch("https://react-http-3ba5b-default-rtdb.firebaseio.com/meals.json")
             const responseData = await response.json()
             const mealsData = []
@@ -21,7 +22,8 @@ const AvailableMeals = () => {
                     price: responseData[key].price,
             })
             }
-            setMeals(mealsData)          
+            setMeals(mealsData) 
+            setIsLoading(false)      
         }
         fetchData()
     }, [])
@@ -39,7 +41,7 @@ const AvailableMeals = () => {
     return (
         <section className={classes.meals}>
             <Card>
-                <ul>{mealsList}</ul>
+                {!isLoading ? <ul>{mealsList}</ul>:<h1>Loading the List of Meals. Please Wait...!</h1>}
             </Card>
         </section>
     );
